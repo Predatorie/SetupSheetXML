@@ -1,0 +1,41 @@
+###############################################################################
+# NETHook function table			
+###############################################################################
+#
+# Name		: SetupSheetXML.ft
+# NETHook 	: SetupSheetXML.dll
+# Date		: 
+# Author	: 
+# Notes		: MAKE SURE TO RENAME 'Nethook' with the name of your DLL
+# Language	: C#
+#
+###############################################################################
+
+
+######################
+# ASSIGN A UNIQUE NAME
+######################
+APPLICATION "__SetupSheetXML__"
+
+######################
+# NETHook LOCATION
+######################
+#
+# Update paths below to match your install path and project name.
+FUNC_DLL   "CHOOKS\SetupSheetXML.dll"
+RES_DLL    "SAME"
+dnRES_NAME "SetupSheetXML.FunctionTable.Resource"
+CATEGORY   "Setup Sheet XML"
+
+##############################################################################
+# Public functions here
+##############################################################################
+#
+# The main system entry point defined in NethookMain.cs
+FUNCTION NET "Run"
+    dnSPNG "Run16"
+    dnLPNG "Run24"
+    dnTIP  "RunTip"
+END_FUNCTION
+
+# EOF

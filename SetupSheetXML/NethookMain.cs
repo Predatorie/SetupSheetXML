@@ -18,7 +18,7 @@ namespace SetupSheetXML
     using Mastercam.App.Types;
     using Mastercam.IO;
 
-    using SetupSheetXML.Services;
+    using Services;
 
     using ViewModels;
     using Views;
@@ -46,6 +46,7 @@ namespace SetupSheetXML
                 }
 
                 // Create the view and attach the viewmodel
+                // Using PRISM, Ninject or somekind of IOC container would be a better idea.
                 var view = new SetupSheetView { DataContext = new SetupSheetViewModel(new MessageBoxService()) };
                 var ret = view.ShowDialog();
 

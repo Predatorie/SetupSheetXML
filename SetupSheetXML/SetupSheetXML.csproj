@@ -87,7 +87,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IMessageBoxService.cs" />
     <Compile Include="Services\MessageBoxService.cs" />
-    <Compile Include="Services\ShellHelper.cs" />
     <Compile Include="ViewModels\SetupSheetViewModel.cs" />
     <Compile Include="Views\SetupSheetView.xaml.cs">
       <DependentUpon>SetupSheetView.xaml</DependentUpon>

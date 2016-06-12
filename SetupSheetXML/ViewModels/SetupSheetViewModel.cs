@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SetupSheetViewModel.cs" company="CNC SOftware,Inc.">
+// <copyright file="SetupSheetViewModel.cs" company="CNC Software,Inc.">
 //   mick.george@mastercam.com
 // </copyright>
 // <summary>
@@ -83,8 +83,9 @@ namespace SetupSheetXML.ViewModels
         #region Construction
 
         /// <summary>
-        /// Constructor
+        ///  The SetupSheetViewModel constructor
         /// </summary>
+        /// <param name="messageBoxService">The MessageBoxService instance</param>
         public SetupSheetViewModel(IMessageBoxService messageBoxService)
         {
             // Wire up our services
@@ -95,6 +96,7 @@ namespace SetupSheetXML.ViewModels
             this.CloseCommand = new DelegateCommand<Window>(this.Close);
             this.BrowseCommand = new DelegateCommand(this.BrowseReport);
 
+            // TODO: Allow user to set all properties
             this.Title = "Generate Setup Sheet XML";
             this.GenerateColorImages = true;
             this.GenerateAutomaticImages = true;
@@ -102,6 +104,9 @@ namespace SetupSheetXML.ViewModels
             this.WritePdf = false;
             this.DisplayViewer = false;
             this.View  = GraphicsView.Wcs;
+            this.Xml = "Setup Sheet";
+
+            // TODO: Implement Saving and Loading previous settings
         }
 
         #endregion
@@ -453,6 +458,7 @@ namespace SetupSheetXML.ViewModels
                     var path = new FileInfo(xmlFiles[0]);
                     var name = Path.Combine(path.DirectoryName, this.Xml + ".xml");
 
+                    // Overwrite the previous file
                     File.Copy(xmlFiles[0], name, true);
 
                     this.messageBoxService.Show(

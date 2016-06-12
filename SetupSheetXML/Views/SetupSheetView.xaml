@@ -50,7 +50,7 @@
         <Label x:Name="Note3" Content="Note 3" Grid.Column="0" Grid.Row="10"  VerticalAlignment="Center"/>
 
         <TextBox x:Name="XmlText" Grid.Column="1" Grid.Row="0" Text="{Binding Xml, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="ReportText" Grid.Column="1" Grid.Row="1" Text="{Binding Report, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="ReportText"  Grid.Column="1" Grid.Row="1" Text="{Binding Report, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
 
         <TextBox x:Name="ProjectText" Grid.Column="1" Grid.Row="3" Text="{Binding Project, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
         <TextBox x:Name="CustomerText" Grid.Column="1" Grid.Row="4" Text="{Binding Customer, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />

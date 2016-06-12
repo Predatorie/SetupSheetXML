@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessageBoxService.cs" company="CNC SOftware,Inc.">
+// <copyright file="MessageBoxService.cs" company="CNC Software,Inc.">
 //   mick.george@mastercam.com
 // </copyright>
 // <summary>
@@ -16,15 +16,6 @@ namespace SetupSheetXML.Services
     /// </summary>
     public class MessageBoxService : IMessageBoxService
     {
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets a value indicating whether any post output interaction should be disabled.
-        /// </summary>
-        public bool IsSilentPosting { get; set; }
-
-        #endregion
-
         #region IMessageBoxService Members
 
         /// <summary>
@@ -36,15 +27,7 @@ namespace SetupSheetXML.Services
         /// </returns>
         public MessageBoxResult Show(string messageBoxText)
         {
-            if (this.IsSilentPosting)
-            {
-                return MessageBoxResult.None;
-            }
-
-            var owner = ShellHelper.FindSuitableOwner();
-            return owner != null
-                   ? MessageBox.Show(owner, messageBoxText)
-                   : MessageBox.Show(messageBoxText);
+            return MessageBox.Show(messageBoxText);
         }
 
         /// <summary>
@@ -57,15 +40,7 @@ namespace SetupSheetXML.Services
         /// </returns>
         public MessageBoxResult Show(string messageBoxText, string caption)
         {
-            if (this.IsSilentPosting)
-            {
-                return MessageBoxResult.None;
-            }
-
-            var owner = ShellHelper.FindSuitableOwner();
-            return owner != null
-                   ? MessageBox.Show(owner, messageBoxText, caption)
-                   : MessageBox.Show(messageBoxText, caption);
+            return MessageBox.Show(messageBoxText, caption);
         }
 
         /// <summary>
@@ -79,15 +54,7 @@ namespace SetupSheetXML.Services
         /// </returns>
         public MessageBoxResult Show(string messageBoxText, string caption, MessageBoxButton button)
         {
-            if (this.IsSilentPosting)
-            {
-                return MessageBoxResult.None;
-            }
-
-            var owner = ShellHelper.FindSuitableOwner();
-            return owner != null
-                   ? MessageBox.Show(owner, messageBoxText, caption, button)
-                   : MessageBox.Show(messageBoxText, caption, button);
+            return MessageBox.Show(messageBoxText, caption, button);
         }
 
         /// <summary>
@@ -103,15 +70,7 @@ namespace SetupSheetXML.Services
         /// </returns>
         public MessageBoxResult Show(string messageBoxText, string caption, MessageBoxButton button, MessageBoxImage icon)
         {
-            if (this.IsSilentPosting)
-            {
-                return MessageBoxResult.None;
-            }
-
-            var owner = ShellHelper.FindSuitableOwner();
-            return owner != null
-                   ? MessageBox.Show(owner, messageBoxText, caption, button, icon)
-                   : MessageBox.Show(messageBoxText, caption, button, icon);
+            return MessageBox.Show(messageBoxText, caption, button, icon);
         }
 
         #endregion

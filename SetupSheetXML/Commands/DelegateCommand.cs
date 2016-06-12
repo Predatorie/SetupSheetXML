@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DelegateCommand.cs" company="">
-//   
+// <copyright file="DelegateCommand.cs" company="CNC Software,Inc.">
+//   mick.george@mastercam.com
 // </copyright>
 // <summary>
 //   This class allows delegating the commanding logic to methods passed as parameters,
@@ -76,7 +76,7 @@ namespace SetupSheetXML.Commands
         {
             if (executeMethod == null)
             {
-                throw new ArgumentNullException("executeMethod");
+                throw new ArgumentNullException(nameof(executeMethod));
             }
 
             this.executeMethod = executeMethod;
@@ -192,10 +192,7 @@ namespace SetupSheetXML.Commands
         /// </summary>
         public void Execute()
         {
-            if (this.executeMethod != null)
-            {
-                this.executeMethod();
-            }
+            this.executeMethod?.Invoke();
         }
 
         /// <summary>
@@ -284,7 +281,7 @@ namespace SetupSheetXML.Commands
         {
             if (executeMethod == null)
             {
-                throw new ArgumentNullException("executeMethod");
+                throw new ArgumentNullException(nameof(executeMethod));
             }
 
             this.executeMethod = executeMethod;
@@ -430,10 +427,7 @@ namespace SetupSheetXML.Commands
         /// <param name="parameter">Template param</param>
         public void Execute(T parameter)
         {
-            if (this.executeMethod != null)
-            {
-                this.executeMethod(parameter);
-            }
+            this.executeMethod?.Invoke(parameter);
         }
 
         /// <summary>

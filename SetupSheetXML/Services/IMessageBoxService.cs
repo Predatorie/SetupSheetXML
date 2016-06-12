@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMessageBoxService.cs" company="CNC SOftware,Inc.">
+// <copyright file="IMessageBoxService.cs" company="CNC Software,Inc.">
 //   mick.george@mastercam.com
 // </copyright>
 // <summary>

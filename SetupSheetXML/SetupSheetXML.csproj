@@ -82,11 +82,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ReportHeader.cs" />
     <Compile Include="NethookMain.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceStrings\ApplicationStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ApplicationStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IMessageBoxService.cs" />
+    <Compile Include="Services\ISerializerService.cs" />
     <Compile Include="Services\MessageBoxService.cs" />
+    <Compile Include="Services\SerializerService.cs" />
     <Compile Include="ViewModels\SetupSheetViewModel.cs" />
     <Compile Include="Views\SetupSheetView.xaml.cs">
       <DependentUpon>SetupSheetView.xaml</DependentUpon>
@@ -101,6 +109,10 @@
     <EmbeddedResource Include="FunctionTable\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ResourceStrings\ApplicationStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ApplicationStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

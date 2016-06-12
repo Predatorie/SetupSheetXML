@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DelegateCommand.cs" company="CNC Software,Inc.">
-//   mick.george@mastercam.com
+// <copyright file="DelegateCommand.cs" company="Mick George @Osoy">
+//   Copyright (c) 2016 Mick George developer@seidr.net
 // </copyright>
 // <summary>
 //   This class allows delegating the commanding logic to methods passed as parameters,

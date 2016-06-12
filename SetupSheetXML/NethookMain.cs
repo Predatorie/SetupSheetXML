@@ -1,6 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------
-// <copyright file="NethookMain.cs" company="CNC Software,Inc.">
-//   mick.george@mastercam.com
+// <copyright file="NethookMain.cs" company="Mick George @Osoy">
+//   Copyright (c) 2016 Mick George developer@seidr.net
 //
 // NET-Hook project examples can be found at mastercam.com
 // Active API forums can be found at mastercam.com and eMastercam.com
@@ -47,7 +47,7 @@ namespace SetupSheetXML
 
                 // Create the view and attach the viewmodel
                 // Using PRISM, Ninject or somekind of IOC container would be a better idea.
-                var view = new SetupSheetView { DataContext = new SetupSheetViewModel(new MessageBoxService()) };
+                var view = new SetupSheetView { DataContext = new SetupSheetViewModel(new MessageBoxService(), new SerializerService()) };
                 var ret = view.ShowDialog();
 
                 if (ret != null && (bool)ret)

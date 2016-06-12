@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SetupSheetViewModel.cs" company="CNC Software,Inc.">
-//   mick.george@mastercam.com
+// <copyright file="SetupSheetViewModel.cs" company="Mick George @Osoy">
+//   Copyright (c) 2016 Mick George developer@seidr.net
 // </copyright>
 // <summary>
 //   Defines the SetupSheetViewModel type.
@@ -21,22 +21,16 @@ namespace SetupSheetXML.ViewModels
 
     using Commands;
 
+    using Mastercam.App.Exceptions;
     using Mastercam.IO;
 
     using Services;
 
+    using Models;
+
+    using ResourceStrings;
+
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-
-    public enum GraphicsView
-    {
-        Wcs = 0,
-
-        ToolPlane,
-
-        IsometricRelativeToWcs,
-
-        IsometricWorld
-    }
 
     public class SetupSheetViewModel : INotifyPropertyChanged
     {
@@ -44,39 +38,17 @@ namespace SetupSheetXML.ViewModels
 
         private readonly IMessageBoxService messageBoxService;
 
-        private string xml;
-
-        private string project;
-
-        private string customer;
-
-        private string programmer;
-
-        private string drawing;
-
-        private string revision;
-
-        private string noteOne;
-
-        private string noteTwo;
-
-        private string noteThree;
-
-        private string report;
-
-        private bool generateAutomaticImages;
-
-        private bool generateAutomaticOperationImages;
-
-        private bool generateColorImages;
-
-        private bool displayViewer;
-
-        private bool writePdf;
-
-        private GraphicsView graphicsView;
+        private readonly ISerializerService serializerService;
 
         private string title;
+
+        #endregion
+
+        #region Constants
+
+        private static readonly string HeaderFile = Path.Combine(SettingsManager.SharedDirectory, "common\\reports\\TMP\\report.txt");
+
+        private static readonly string ReportsFolder = Path.Combine(SettingsManager.SharedDirectory, "common\\reports\\SST");
 
         #endregion
 
@@ -86,27 +58,22 @@ namespace SetupSheetXML.ViewModels
         ///  The SetupSheetViewModel constructor
         /// </summary>
         /// <param name="messageBoxService">The MessageBoxService instance</param>
-        public SetupSheetViewModel(IMessageBoxService messageBoxService)
+        /// <param name="serializerService">The SerializerService instance</param>
+        public SetupSheetViewModel(IMessageBoxService messageBoxService, ISerializerService serializerService)
         {
             // Wire up our services
             this.messageBoxService = messageBoxService;
+            this.serializerService = serializerService;
 
             // Wire up our commands
             this.OkCommand = new DelegateCommand(this.GenerateXml, this.CanGenerateXml);
             this.CloseCommand = new DelegateCommand<Window>(this.Close);
             this.BrowseCommand = new DelegateCommand(this.BrowseReport);
 
-            // TODO: Allow user to set all properties
-            this.Title = "Generate Setup Sheet XML";
-            this.GenerateColorImages = true;
-            this.GenerateAutomaticImages = true;
-            this.GenerateAutomaticOperationImages = true;
-            this.WritePdf = false;
-            this.DisplayViewer = false;
-            this.View  = GraphicsView.Wcs;
-            this.Xml = "Setup Sheet";
+            //  Initialize view from previous session 
+            this.LoadValues();
 
-            // TODO: Implement Saving and Loading previous settings
+            this.Title = ApplicationStrings.Title;
         }
 
         #endregion
@@ -123,215 +90,7 @@ namespace SetupSheetXML.ViewModels
 
         #region Public Properties
 
-        public string Project
-        {
-            get
-            {
-                return this.project;
-            }
-
-            set
-            {
-                this.project = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Customer
-        {
-            get
-            {
-                return this.customer;
-            }
-
-            set
-            {
-                this.customer = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Programmer
-        {
-            get
-            {
-                return this.programmer;
-            }
-            set
-            {
-                this.programmer = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Drawing
-        {
-            get
-            {
-                return this.drawing;
-            }
-            set
-            {
-                this.drawing = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Revision
-        {
-            get
-            {
-                return this.revision;
-            }
-            set
-            {
-                this.revision = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string NoteOne
-        {
-            get
-            {
-                return this.noteOne;
-            }
-            set
-            {
-                this.noteOne = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string NoteTwo
-        {
-            get
-            {
-                return this.noteTwo;
-            }
-            set
-            {
-                this.noteTwo = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string NoteThree
-        {
-            get
-            {
-                return this.noteThree;
-            }
-            set
-            {
-                this.noteThree = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Report
-        {
-            get
-            {
-                return this.report;
-            }
-            set
-            {
-                this.report = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool GenerateAutomaticImages
-        {
-            get
-            {
-                return this.generateAutomaticImages;
-            }
-            set
-            {
-                this.generateAutomaticImages = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool GenerateAutomaticOperationImages
-        {
-            get
-            {
-                return this.generateAutomaticOperationImages;
-            }
-            set
-            {
-                this.generateAutomaticOperationImages = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool GenerateColorImages
-        {
-            get
-            {
-                return this.generateColorImages;
-            }
-            set
-            {
-                this.generateColorImages = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool DisplayViewer
-        {
-            get
-            {
-                return this.displayViewer;
-            }
-            set
-            {
-                this.displayViewer = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool WritePdf
-        {
-            get
-            {
-                return this.writePdf;
-            }
-            set
-            {
-                this.writePdf = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public GraphicsView View
-        {
-            get
-            {
-                return this.graphicsView;
-            }
-            set
-            {
-                this.graphicsView = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Xml
-        {
-            get
-            {
-                return this.xml;
-            }
-            set
-            {
-                this.xml = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public ReportHeader Header { get; set; }
 
         public string Title
         {
@@ -342,6 +101,203 @@ namespace SetupSheetXML.ViewModels
             set
             {
                 this.title = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Project
+        {
+            get
+            {
+                return this.Header.Project;
+            }
+
+            set
+            {
+                this.Header.Project = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Customer
+        {
+            get
+            {
+                return this.Header.Customer;
+            }
+
+            set
+            {
+                this.Header.Customer = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Programmer
+        {
+            get
+            {
+                return this.Header.Programmer;
+            }
+            set
+            {
+                this.Header.Programmer = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Drawing
+        {
+            get
+            {
+                return this.Header.Drawing;
+            }
+            set
+            {
+                this.Header.Drawing = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Revision
+        {
+            get
+            {
+                return this.Header.Revision;
+            }
+            set
+            {
+                this.Header.Revision = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string NoteOne
+        {
+            get
+            {
+                return this.Header.NoteOne;
+            }
+            set
+            {
+                this.Header.NoteOne = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string NoteTwo
+        {
+            get
+            {
+                return this.Header.NoteTwo;
+            }
+            set
+            {
+                this.Header.NoteTwo = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string NoteThree
+        {
+            get
+            {
+                return this.Header.NoteThree;
+            }
+            set
+            {
+                this.Header.NoteThree = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Report
+        {
+            get
+            {
+                return this.Header.Report;
+            }
+            set
+            {
+                this.Header.Report = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public bool GenerateAutomaticImages
+        {
+            get
+            {
+                return this.Header.GenerateAutomaticImages;
+            }
+            set
+            {
+                this.Header.GenerateAutomaticImages = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public bool GenerateAutomaticOperationImages
+        {
+            get
+            {
+                return this.Header.GenerateAutomaticOperationImages;
+            }
+            set
+            {
+                this.Header.GenerateAutomaticOperationImages = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public bool GenerateColorImages
+        {
+            get
+            {
+                return this.Header.GenerateColorImages;
+            }
+            set
+            {
+                this.Header.GenerateColorImages = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public bool DisplayViewer
+        {
+            get
+            {
+                return this.Header.DisplayViewer;
+            }
+            set
+            {
+                this.Header.DisplayViewer = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public bool WritePdf
+        {
+            get
+            {
+                return this.Header.WritePdf;
+            }
+            set
+            {
+                this.Header.WritePdf = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Xml
+        {
+            get
+            {
+                return this.Header.Xml;
+            }
+            set
+            {
+                this.Header.Xml = value;
                 this.OnPropertyChanged();
             }
         }
@@ -367,8 +323,25 @@ namespace SetupSheetXML.ViewModels
         #region Private Methods
 
         /// <summary>
+        /// Load previous values from disk.
+        /// </summary>
+        private void LoadValues()
+        {
+            this.Header = File.Exists(HeaderFile) ?
+                this.serializerService.DeserializeObject<ReportHeader>(HeaderFile) :
+                new ReportHeader();
+        }
+
+        /// <summary>
+        /// Save values to disk.
+        /// </summary>
+        private void SaveValues()
+        {
+            this.serializerService.SerializeObject(HeaderFile, this.Header);
+        }
+
+        /// <summary>
         /// Select a rpx (report)
-        /// C:\Users\Public\Documents\shared mcamx9\common\reports\SST
         /// </summary>
         private void BrowseReport()
         {
@@ -379,15 +352,15 @@ namespace SetupSheetXML.ViewModels
                 CheckPathExists = true,
                 DefaultExt = "rpx",
                 Filter = "Report (*.rpx)|*.rpx|All files (*.*)|*.*",
-                Title = "Select a Report",
+                Title = ApplicationStrings.SelectReport,
                 ValidateNames = true,
-                InitialDirectory = Path.Combine(SettingsManager.SharedDirectory, "common\\reports\\SST")
+                InitialDirectory = ReportsFolder
             };
 
             var success = f.ShowDialog();
             if (success != null && (bool)success)
             {
-                this.Report = f.FileName;
+                this.Header.Report = f.FileName;
             }
         }
 
@@ -399,9 +372,9 @@ namespace SetupSheetXML.ViewModels
         private bool CanGenerateXml()
         {
             // Only if we have a report name and a report
-            return !string.IsNullOrEmpty(this.Report) &&
-                !string.IsNullOrEmpty(this.Xml) &&
-                File.Exists(this.Report);
+            return !string.IsNullOrEmpty(this.Header.Report) &&
+                !string.IsNullOrEmpty(this.Header.Xml) &&
+                File.Exists(this.Header.Report);
         }
 
         /// <summary>
@@ -415,18 +388,18 @@ namespace SetupSheetXML.ViewModels
                 // There MUST be 8 of them and only 8!
                 var drawingInfo = new List<string>(8)
                                         {
-                                            this.Project,
-                                            this.Customer,
-                                            this.Programmer,
-                                            this.Drawing,
-                                            this.Revision,
-                                            this.noteOne,
-                                            this.noteTwo,
-                                            this.noteThree
+                                            this.Header.Project,
+                                            this.Header.Customer,
+                                            this.Header.Programmer,
+                                            this.Header.Drawing,
+                                            this.Header.Revision,
+                                            this.Header.NoteOne,
+                                            this.Header.NoteTwo,
+                                            this.Header.NoteThree
                                         };
 
                 // Add the selected report to the list so we know what data fields are to be output
-                var rpx = new List<string> { this.Report };
+                var rpx = new List<string> { this.Header.Report };
 
                 // Holds list of xml files created, should be one.
                 var xmlFiles = new List<string>();
@@ -434,65 +407,55 @@ namespace SetupSheetXML.ViewModels
                 // Run the C-Hook command to generate the XML
                 var success = SetupSheetInterop.SetupSheet.SetupSheet_DoRunNoDialog(ref drawingInfo,
                     ref rpx,
-                    this.generateAutomaticImages,
-                    this.generateAutomaticOperationImages,
-                    this.GenerateColorImages,
-                    (int)this.View,
-                    this.DisplayViewer,
-                    this.WritePdf,
+                    this.Header.GenerateAutomaticImages,
+                    this.Header.GenerateAutomaticOperationImages,
+                    this.Header.GenerateColorImages,
+                    (int)this.Header.View,
+                    this.Header.DisplayViewer,
+                    this.Header.WritePdf,
                     ref xmlFiles);
 
                 if (success)
                 {
                     if (xmlFiles.Count != 1)
                     {
-                        this.messageBoxService.Show(
+                        this.messageBoxService.MastercamError(
                         $"XML generation failed, expected 1 xml file, {xmlFiles.Count} found.",
-                        "Mastercam",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                        ApplicationStrings.Title);
 
                         return;
                     }
 
                     var path = new FileInfo(xmlFiles[0]);
-                    var name = Path.Combine(path.DirectoryName, this.Xml + ".xml");
+                    var name = Path.Combine(path.DirectoryName, this.Header.Xml + ".xml");
 
                     // Overwrite the previous file
                     File.Copy(xmlFiles[0], name, true);
 
-                    this.messageBoxService.Show(
-                        "XML generation complete",
-                        "Mastercam",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    this.messageBoxService.Ok("XML generation complete", ApplicationStrings.Title);
                 }
                 else
                 {
-                    this.messageBoxService.Show(
+                    this.messageBoxService.MastercamError(
                         "XML generation failed, call to 'SetupSheet_DoRunNoDialog' returned false.",
-                        "Mastercam",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Exclamation);
+                        ApplicationStrings.Title);
                 }
             }
             catch (Exception e)
             {
-
-                this.messageBoxService.Show(
-                        $"An unexpected error has occured {e.Message}.",
-                        "Mastercam",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Exclamation);
+                this.messageBoxService.MastercamException(new MastercamException($"An unexpected error has occured {e.Message}."));
             }
         }
 
         /// <summary>
-        /// Closes the main view
+        /// Saves the current report header data and closes the main view
         /// </summary>
-        /// <param name="view"></param>
+        /// <param name="view">The view to close</param>
         private void Close(Window view)
         {
+            // Save report values to disk
+            this.SaveValues();
+
             view.Close();
         }
 

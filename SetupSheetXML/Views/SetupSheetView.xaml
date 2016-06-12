@@ -49,17 +49,17 @@
         <Label x:Name="Note2" Content="Note 2" Grid.Column="0" Grid.Row="9"  VerticalAlignment="Center"/>
         <Label x:Name="Note3" Content="Note 3" Grid.Column="0" Grid.Row="10"  VerticalAlignment="Center"/>
 
-        <TextBox x:Name="XmlText" Grid.Column="1" Grid.Row="0" Text="{Binding Xml, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="ReportText"  Grid.Column="1" Grid.Row="1" Text="{Binding Report, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="XmlText" Grid.Column="1" Grid.Row="0" Text="{Binding Header.Xml, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="ReportText"  Grid.Column="1" Grid.Row="1" Text="{Binding Header.Report, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
 
-        <TextBox x:Name="ProjectText" Grid.Column="1" Grid.Row="3" Text="{Binding Project, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="CustomerText" Grid.Column="1" Grid.Row="4" Text="{Binding Customer, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="ProgrammerText" Grid.Column="1" Grid.Row="5" Text="{Binding Programmer, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="DrawingText" Grid.Column="1" Grid.Row="6" Text="{Binding Drawing, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="RevisionText" Grid.Column="1" Grid.Row="7" Text="{Binding Revision, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="Note1Text" Grid.Column="1" Grid.Row="8" Text="{Binding NoteOne, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="Note2Text" Grid.Column="1" Grid.Row="9" Text="{Binding NoteTwo, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        <TextBox x:Name="Note3Text" Grid.Column="1" Grid.Row="10" Text="{Binding NoteThree, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="ProjectText" Grid.Column="1" Grid.Row="3" Text="{Binding Header.Project, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="CustomerText" Grid.Column="1" Grid.Row="4" Text="{Binding Header.Customer, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="ProgrammerText" Grid.Column="1" Grid.Row="5" Text="{Binding Header.Programmer, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="DrawingText" Grid.Column="1" Grid.Row="6" Text="{Binding Header.Drawing, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="RevisionText" Grid.Column="1" Grid.Row="7" Text="{Binding Header.Revision, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="Note1Text" Grid.Column="1" Grid.Row="8" Text="{Binding Header.NoteOne, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="Note2Text" Grid.Column="1" Grid.Row="9" Text="{Binding Header.NoteTwo, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="Note3Text" Grid.Column="1" Grid.Row="10" Text="{Binding Header.NoteThree, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
 
         <Button x:Name="BrowseButton" 
                 Content="Browse..." 
@@ -79,17 +79,15 @@
                 VerticalContentAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Margin="5"/>
-        
+
         <Button x:Name="OkButton" 
                 Content="OK" 
                 Command="{Binding OkCommand}" 
                 Grid.Column="2" 
-                Grid.Row="12" 
+                Grid.Row="11" 
                 VerticalContentAlignment="Center"
                 HorizontalContentAlignment="Center"
                 Margin="5" />
-
-
     </Grid>
 
 </Window>

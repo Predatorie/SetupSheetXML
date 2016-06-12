@@ -1,7 +1,6 @@
 ﻿// ---------------------------------------------------------------------------------------
-// <copyright file="NethookMain.cs" company="TODO: Add company">
-// TODO: Update copyright text.
-// NOTE: If are only going to use the Run method it is good practice to delete the others.
+// <copyright file="NethookMain.cs" company="CNC Software,Inc.">
+//   mick.george@mastercam.com
 //
 // NET-Hook project examples can be found at mastercam.com
 // Active API forums can be found at mastercam.com and eMastercam.com
@@ -12,17 +11,17 @@
 namespace SetupSheetXML
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Windows;
+    using System.Linq;
 
     using Mastercam.App;
     using Mastercam.App.Exceptions;
     using Mastercam.App.Types;
     using Mastercam.IO;
 
-    using SetupSheetXML.ViewModels;
-    using SetupSheetXML.Views;
+    using SetupSheetXML.Services;
+
+    using ViewModels;
+    using Views;
 
     /// <summary>
     /// Defines the NethookMain type
@@ -40,7 +39,14 @@ namespace SetupSheetXML
         {
             try
             {
-                var view = new SetupSheetView { DataContext = new SetupSheetViewModel() };
+                // Make sure we have at least one operation
+                if (!Mastercam.Support.SearchManager.GetOperations().Any())
+                {
+                    return MCamReturn.FunctionExit;
+                }
+
+                // Create the view and attach the viewmodel
+                var view = new SetupSheetView { DataContext = new SetupSheetViewModel(new MessageBoxService()) };
                 var ret = view.ShowDialog();
 
                 if (ret != null && (bool)ret)
@@ -52,40 +58,6 @@ namespace SetupSheetXML
             {
                 DialogManager.Exception(new MastercamException(e.Message));
             }
-
-           
-
-            //////var report = Path.Combine(SettingsManager.SharedDirectory, @"common\reports\SST\") + "Setup Sheet (MILL).rpx";
-
-            //////// There MUST be the same number of rpx files in this list as there are Machine Groups in the file!
-            //////var rpxFiles = new List<string> { report };
-
-            //////// Set options as desired...
-            //////var automaticImages = true;
-
-            //////var automaticOperationImages = true;
-
-            //////var colorImages = true;
-
-            //////var graphicsView = 2;
-
-            //////var displayViewer = false;
-
-            //////var writePdfToDisk = true;
-
-            //////// This will be filled in with the list of XML file that were produced.
-            //////var xmlFiles = new List<string>();
-
-            //////var ok = SetupSheetInterop.SetupSheet.SetupSheet_DoRunNoDialog(
-            //////    ref drawingInfo,   // I:	strings to use instead of dialog items (Programmer, etc)
-            //////    ref rpxFiles,   // I/O:	rpx templates
-            //////    automaticImages,      // I:	generate automatic images
-            //////    automaticOperationImages,       // I:	generate automatic operation images (anyImages must be true)
-            //////    colorImages,         // I:	generate color images (anyImage or opImages must be true)
-            //////    graphicsView,     // I:	0=WCS, 1=TPLANE, 2=Isometric relative to WCS, 3=Isometric (WORLD)
-            //////    displayViewer,      // I:	display results in viewer
-            //////    writePdfToDisk,       // I:	write PDF files (useViewer must be false)
-            //////    ref xmlFiles);  // O:	list xml written
 
             return MCamReturn.NoErrors;
         }

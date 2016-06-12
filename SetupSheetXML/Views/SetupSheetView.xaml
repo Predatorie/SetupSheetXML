@@ -4,16 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SetupSheetXML.Views"
-             mc:Ignorable="d" 
-            Width="330"
-            Height="400"
-             d:DesignHeight="328.602" d:DesignWidth="381.992">
+             Title="{Binding Title}"
+             WindowStartupLocation="CenterScreen"
+             WindowStyle="SingleBorderWindow"
+             ResizeMode="NoResize"
+             Width="625"
+             Height="416"
+             MinWidth="625"
+             MinHeight="425" >
 
-    <Grid x:Name="Grid" Margin="10, 10, 10, 10" ShowGridLines="true">
+    <Grid x:Name="Grid" Margin="10, 10, 10, 10" ShowGridLines="false">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="75"  />
+            <ColumnDefinition Width="85"  />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="55"  />
+            <ColumnDefinition Width="55"  />
 
         </Grid.ColumnDefinitions>
 
@@ -26,28 +32,62 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
-            <RowDefinition  />
-            <RowDefinition  Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition  Height="35" />
         </Grid.RowDefinitions>
 
-        <Label x:Name="Project" Content="Project" Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center"/>
-        <Label x:Name="Customer" Content="Customer" Grid.Column="0" Grid.Row="1"  VerticalAlignment="Center"/>
-        <Label x:Name="Programmer" Content="Programmer" Grid.Column="0" Grid.Row="2"  VerticalAlignment="Center"/>
-        <Label x:Name="Drawing" Content="Drawing" Grid.Column="0" Grid.Row="3"  VerticalAlignment="Center"/>
-        <Label x:Name="Revision" Content="Revision" Grid.Column="0" Grid.Row="4"  VerticalAlignment="Center"/>
-        <Label x:Name="Note1" Content="Note 1" Grid.Column="0" Grid.Row="5"  VerticalAlignment="Center"/>
-        <Label x:Name="Note2" Content="Note 2" Grid.Column="0" Grid.Row="6"  VerticalAlignment="Center"/>
-        <Label x:Name="Note3" Content="Note 3" Grid.Column="0" Grid.Row="7"  VerticalAlignment="Center"/>
+        <Label x:Name="XML" Content="XML Name" Grid.Column="0" Grid.Row="0"  VerticalAlignment="Center"/>
+        <Label x:Name="Report" Content="Report" Grid.Column="0" Grid.Row="1"  VerticalAlignment="Center"/>
+        <Label x:Name="Project" Content="Project" Grid.Column="0" Grid.Row="3"  VerticalAlignment="Center"/>
+        <Label x:Name="Customer" Content="Customer" Grid.Column="0" Grid.Row="4"  VerticalAlignment="Center"/>
+        <Label x:Name="Programmer" Content="Programmer" Grid.Column="0" Grid.Row="5"  VerticalAlignment="Center"/>
+        <Label x:Name="Drawing" Content="Drawing" Grid.Column="0" Grid.Row="6"  VerticalAlignment="Center"/>
+        <Label x:Name="Revision" Content="Revision" Grid.Column="0" Grid.Row="7"  VerticalAlignment="Center"/>
+        <Label x:Name="Note1" Content="Note 1" Grid.Column="0" Grid.Row="8"  VerticalAlignment="Center"/>
+        <Label x:Name="Note2" Content="Note 2" Grid.Column="0" Grid.Row="9"  VerticalAlignment="Center"/>
+        <Label x:Name="Note3" Content="Note 3" Grid.Column="0" Grid.Row="10"  VerticalAlignment="Center"/>
 
-        <TextBox x:Name="ProjectText" Grid.Column="1" Grid.Row="0" Text="{Binding Project}" VerticalAlignment="Center" />
-        <TextBox x:Name="CustomerText" Grid.Column="1" Grid.Row="1" Text="{Binding Customer}" VerticalAlignment="Center" />
-        <TextBox x:Name="ProgrammerText" Grid.Column="1" Grid.Row="2" Text="{Binding Programmer}" VerticalAlignment="Center" />
-        <TextBox x:Name="DrawingText" Grid.Column="1" Grid.Row="3" Text="{Binding Drawing}" VerticalAlignment="Center" />
-        <TextBox x:Name="RevisionText" Grid.Column="1" Grid.Row="4" Text="{Binding Revision}" VerticalAlignment="Center" />
-        <TextBox x:Name="Note1Text" Grid.Column="1" Grid.Row="5" Text="{Binding NoteOne}" VerticalAlignment="Center" />
-        <TextBox x:Name="Note2Text" Grid.Column="1" Grid.Row="6" Text="{Binding NoteTwo}" VerticalAlignment="Center" />
-        <TextBox x:Name="Note3Text" Grid.Column="1" Grid.Row="7" Text="{Binding NoteThree}" VerticalAlignment="Center" />
+        <TextBox x:Name="XmlText" Grid.Column="1" Grid.Row="0" Text="{Binding Xml, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="ReportText" Grid.Column="1" Grid.Row="1" Text="{Binding Report, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
 
+        <TextBox x:Name="ProjectText" Grid.Column="1" Grid.Row="3" Text="{Binding Project, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="CustomerText" Grid.Column="1" Grid.Row="4" Text="{Binding Customer, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="ProgrammerText" Grid.Column="1" Grid.Row="5" Text="{Binding Programmer, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="DrawingText" Grid.Column="1" Grid.Row="6" Text="{Binding Drawing, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="RevisionText" Grid.Column="1" Grid.Row="7" Text="{Binding Revision, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="Note1Text" Grid.Column="1" Grid.Row="8" Text="{Binding NoteOne, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="Note2Text" Grid.Column="1" Grid.Row="9" Text="{Binding NoteTwo, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+        <TextBox x:Name="Note3Text" Grid.Column="1" Grid.Row="10" Text="{Binding NoteThree, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+
+        <Button x:Name="BrowseButton" 
+                Content="Browse..." 
+                Command="{Binding BrowseCommand}" 
+                Grid.Column="2" 
+                Grid.Row="1" 
+                Grid.ColumnSpan="2" 
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Margin="5" />
+        
+        <Button x:Name="CloseButton" 
+                Content="Close" 
+                Command="{Binding CloseCommand}" 
+                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                Grid.Column="3" Grid.Row="11" 
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Margin="5"/>
+        
+        <Button x:Name="OkButton" 
+                Content="OK" 
+                Command="{Binding OkCommand}" 
+                Grid.Column="2" 
+                Grid.Row="12" 
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Margin="5" />
 
 
     </Grid>

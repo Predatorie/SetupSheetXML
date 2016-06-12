@@ -5,8 +5,8 @@
 # Name		: SetupSheetXML.ft
 # NETHook 	: SetupSheetXML.dll
 # Date		: 
-# Author	: 
-# Notes		: MAKE SURE TO RENAME 'Nethook' with the name of your DLL
+# Author	: mick.george@mastercam.com
+# Notes		: This NET-Hook has a dependency on  SetupSheetInterop.dll
 # Language	: C#
 #
 ###############################################################################

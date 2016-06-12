@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SetupSheetViewModel.cs" company="">
-//   
+// <copyright file="SetupSheetViewModel.cs" company="CNC SOftware,Inc.">
+//   mick.george@mastercam.com
 // </copyright>
 // <summary>
 //   Defines the SetupSheetViewModel type.
@@ -9,8 +9,10 @@
 
 namespace SetupSheetXML.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
     using System.Runtime.CompilerServices;
     using System.Windows;
     using System.Windows.Input;
@@ -18,6 +20,12 @@ namespace SetupSheetXML.ViewModels
     using Annotations;
 
     using Commands;
+
+    using Mastercam.IO;
+
+    using Services;
+
+    using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
     public enum GraphicsView
     {
@@ -33,6 +41,10 @@ namespace SetupSheetXML.ViewModels
     public class SetupSheetViewModel : INotifyPropertyChanged
     {
         #region Backing Fields
+
+        private readonly IMessageBoxService messageBoxService;
+
+        private string xml;
 
         private string project;
 
@@ -64,14 +76,32 @@ namespace SetupSheetXML.ViewModels
 
         private GraphicsView graphicsView;
 
+        private string title;
+
         #endregion
 
         #region Construction
 
-        public SetupSheetViewModel()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SetupSheetViewModel(IMessageBoxService messageBoxService)
         {
+            // Wire up our services
+            this.messageBoxService = messageBoxService;
+
+            // Wire up our commands
             this.OkCommand = new DelegateCommand(this.GenerateXml, this.CanGenerateXml);
             this.CloseCommand = new DelegateCommand<Window>(this.Close);
+            this.BrowseCommand = new DelegateCommand(this.BrowseReport);
+
+            this.Title = "Generate Setup Sheet XML";
+            this.GenerateColorImages = true;
+            this.GenerateAutomaticImages = true;
+            this.GenerateAutomaticOperationImages = true;
+            this.WritePdf = false;
+            this.DisplayViewer = false;
+            this.View  = GraphicsView.Wcs;
         }
 
         #endregion
@@ -81,6 +111,8 @@ namespace SetupSheetXML.ViewModels
         public ICommand OkCommand { get; private set; }
 
         public ICommand CloseCommand { get; private set; }
+
+        public ICommand BrowseCommand { get; private set; }
 
         #endregion
 
@@ -283,6 +315,32 @@ namespace SetupSheetXML.ViewModels
             }
         }
 
+        public string Xml
+        {
+            get
+            {
+                return this.xml;
+            }
+            set
+            {
+                this.xml = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        public string Title
+        {
+            get
+            {
+                return this.title;
+            }
+            set
+            {
+                this.title = value;
+                this.OnPropertyChanged();
+            }
+        }
+
         #endregion
 
         #region Public Events
@@ -303,16 +361,54 @@ namespace SetupSheetXML.ViewModels
 
         #region Private Methods
 
-        private bool CanGenerateXml()
+        /// <summary>
+        /// Select a rpx (report)
+        /// C:\Users\Public\Documents\shared mcamx9\common\reports\SST
+        /// </summary>
+        private void BrowseReport()
         {
-            return true;
+            var f = new OpenFileDialog
+            {
+                AddExtension = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                DefaultExt = "rpx",
+                Filter = "Report (*.rpx)|*.rpx|All files (*.*)|*.*",
+                Title = "Select a Report",
+                ValidateNames = true,
+                InitialDirectory = Path.Combine(SettingsManager.SharedDirectory, "common\\reports\\SST")
+            };
+
+            var success = f.ShowDialog();
+            if (success != null && (bool)success)
+            {
+                this.Report = f.FileName;
+            }
         }
 
+        /// <summary>
+        /// Make sure we have a report selected and a xml file name
+        /// Note: A report is needed because that determines what data is exported to the xml
+        /// </summary>
+        /// <returns></returns>
+        private bool CanGenerateXml()
+        {
+            // Only if we have a report name and a report
+            return !string.IsNullOrEmpty(this.Report) &&
+                !string.IsNullOrEmpty(this.Xml) &&
+                File.Exists(this.Report);
+        }
+
+        /// <summary>
+        /// Generates xml for a setup sheet
+        /// </summary>
         private void GenerateXml()
         {
-            // The strings that would normally be entered on the dialog
-            // There MUST be 8 of them and only 8!
-            var drawingInfo = new List<string>(8)
+            try
+            {
+                // The strings that would normally be entered on the dialog
+                // There MUST be 8 of them and only 8!
+                var drawingInfo = new List<string>(8)
                                         {
                                             this.Project,
                                             this.Customer,
@@ -324,33 +420,71 @@ namespace SetupSheetXML.ViewModels
                                             this.noteThree
                                         };
 
-            // Add the selected report to the list
-            var rpx = new List<string> { this.Report };
+                // Add the selected report to the list so we know what data fields are to be output
+                var rpx = new List<string> { this.Report };
 
-            // Holds list of xml files created
-            var xmlFiles = new List<string>();
+                // Holds list of xml files created, should be one.
+                var xmlFiles = new List<string>();
 
-            // Run the C-Hook command to generate the XML
-            var success = SetupSheetInterop.SetupSheet.SetupSheet_DoRunNoDialog(ref drawingInfo,
-                ref rpx,
-                this.generateAutomaticImages,
-                this.generateAutomaticOperationImages,
-                this.GenerateColorImages,
-                (int)this.View,
-                this.DisplayViewer,
-                this.WritePdf,
-                ref xmlFiles);
+                // Run the C-Hook command to generate the XML
+                var success = SetupSheetInterop.SetupSheet.SetupSheet_DoRunNoDialog(ref drawingInfo,
+                    ref rpx,
+                    this.generateAutomaticImages,
+                    this.generateAutomaticOperationImages,
+                    this.GenerateColorImages,
+                    (int)this.View,
+                    this.DisplayViewer,
+                    this.WritePdf,
+                    ref xmlFiles);
 
-            if (success)
-            {
-                // TODO: Re-name the XML and copy it to where it needs to be
+                if (success)
+                {
+                    if (xmlFiles.Count != 1)
+                    {
+                        this.messageBoxService.Show(
+                        $"XML generation failed, expected 1 xml file, {xmlFiles.Count} found.",
+                        "Mastercam",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+
+                        return;
+                    }
+
+                    var path = new FileInfo(xmlFiles[0]);
+                    var name = Path.Combine(path.DirectoryName, this.Xml + ".xml");
+
+                    File.Copy(xmlFiles[0], name, true);
+
+                    this.messageBoxService.Show(
+                        "XML generation complete",
+                        "Mastercam",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+                else
+                {
+                    this.messageBoxService.Show(
+                        "XML generation failed, call to 'SetupSheet_DoRunNoDialog' returned false.",
+                        "Mastercam",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Exclamation);
+                }
             }
-            else
+            catch (Exception e)
             {
-                // TODO: Handle failure
+
+                this.messageBoxService.Show(
+                        $"An unexpected error has occured {e.Message}.",
+                        "Mastercam",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Exclamation);
             }
         }
 
+        /// <summary>
+        /// Closes the main view
+        /// </summary>
+        /// <param name="view"></param>
         private void Close(Window view)
         {
             view.Close();

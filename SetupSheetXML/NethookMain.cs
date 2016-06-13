@@ -11,16 +11,22 @@
 namespace SetupSheetXML
 {
     using System;
+    using System.IO;
     using System.Linq;
+
+    using Consts;
 
     using Mastercam.App;
     using Mastercam.App.Exceptions;
     using Mastercam.App.Types;
     using Mastercam.IO;
 
+    using ResourceStrings;
+
     using Services;
 
     using ViewModels;
+
     using Views;
 
     /// <summary>
@@ -47,7 +53,13 @@ namespace SetupSheetXML
 
                 // Create the view and attach the viewmodel
                 // Using PRISM, Ninject or somekind of IOC container would be a better idea.
-                var view = new SetupSheetView { DataContext = new SetupSheetViewModel(new MessageBoxService(), new SerializerService()) };
+                var view = new SetupSheetView
+                {
+                    DataContext =
+                                       new SetupSheetViewModel(
+                                       new MessageBoxService(),
+                                       new SerializerService())
+                };
                 var ret = view.ShowDialog();
 
                 if (ret != null && (bool)ret)
@@ -57,7 +69,20 @@ namespace SetupSheetXML
             }
             catch (Exception e)
             {
-                DialogManager.Exception(new MastercamException(e.Message));
+                if (e is InvalidOperationException)
+                {
+                    // Likely an invalid xml file so delete it
+                    if (File.Exists(ApplicationConst.HeaderFile))
+                    {
+                        File.Delete(ApplicationConst.HeaderFile);
+                    }
+
+                    DialogManager.Error(ApplicationStrings.XmlDeserializeException, ApplicationStrings.Title);
+                }
+                else
+                {
+                    DialogManager.Exception(new MastercamException(e.Message));
+                }
             }
 
             return MCamReturn.NoErrors;

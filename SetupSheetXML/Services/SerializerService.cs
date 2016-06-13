@@ -9,9 +9,17 @@
 
 namespace SetupSheetXML.Services
 {
+    using System;
+    using System.Diagnostics;
+    using System.Runtime.Serialization;
     using System.Text;
     using System.Xml;
     using System.Xml.Serialization;
+
+    using Mastercam.App.Exceptions;
+    using Mastercam.IO;
+
+    using SetupSheetXML.Annotations;
 
     public class SerializerService : ISerializerService
     {

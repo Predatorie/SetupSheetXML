@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Consts\ApplicationConst.cs" />
     <Compile Include="FunctionTable\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

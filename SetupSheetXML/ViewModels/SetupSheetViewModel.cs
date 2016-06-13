@@ -22,13 +22,14 @@ namespace SetupSheetXML.ViewModels
     using Commands;
 
     using Mastercam.App.Exceptions;
-    using Mastercam.IO;
 
     using Services;
 
     using Models;
 
     using ResourceStrings;
+
+    using Consts;
 
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -41,14 +42,6 @@ namespace SetupSheetXML.ViewModels
         private readonly ISerializerService serializerService;
 
         private string title;
-
-        #endregion
-
-        #region Constants
-
-        private static readonly string HeaderFile = Path.Combine(SettingsManager.SharedDirectory, "common\\reports\\TMP\\report.txt");
-
-        private static readonly string ReportsFolder = Path.Combine(SettingsManager.SharedDirectory, "common\\reports\\SST");
 
         #endregion
 
@@ -105,202 +98,35 @@ namespace SetupSheetXML.ViewModels
             }
         }
 
-        public string Project
-        {
-            get
-            {
-                return this.Header.Project;
-            }
+        public string Project => this.Header.Project;
 
-            set
-            {
-                this.Header.Project = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public string Customer => this.Header.Customer;
 
-        public string Customer
-        {
-            get
-            {
-                return this.Header.Customer;
-            }
+        public string Programmer => this.Header.Programmer;
+        
+        public string Drawing => this.Header.Drawing;
 
-            set
-            {
-                this.Header.Customer = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Programmer
-        {
-            get
-            {
-                return this.Header.Programmer;
-            }
-            set
-            {
-                this.Header.Programmer = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Drawing
-        {
-            get
-            {
-                return this.Header.Drawing;
-            }
-            set
-            {
-                this.Header.Drawing = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Revision
-        {
-            get
-            {
-                return this.Header.Revision;
-            }
-            set
-            {
-                this.Header.Revision = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string NoteOne
-        {
-            get
-            {
-                return this.Header.NoteOne;
-            }
-            set
-            {
-                this.Header.NoteOne = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string NoteTwo
-        {
-            get
-            {
-                return this.Header.NoteTwo;
-            }
-            set
-            {
-                this.Header.NoteTwo = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string NoteThree
-        {
-            get
-            {
-                return this.Header.NoteThree;
-            }
-            set
-            {
-                this.Header.NoteThree = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Report
-        {
-            get
-            {
-                return this.Header.Report;
-            }
-            set
-            {
-                this.Header.Report = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool GenerateAutomaticImages
-        {
-            get
-            {
-                return this.Header.GenerateAutomaticImages;
-            }
-            set
-            {
-                this.Header.GenerateAutomaticImages = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool GenerateAutomaticOperationImages
-        {
-            get
-            {
-                return this.Header.GenerateAutomaticOperationImages;
-            }
-            set
-            {
-                this.Header.GenerateAutomaticOperationImages = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool GenerateColorImages
-        {
-            get
-            {
-                return this.Header.GenerateColorImages;
-            }
-            set
-            {
-                this.Header.GenerateColorImages = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool DisplayViewer
-        {
-            get
-            {
-                return this.Header.DisplayViewer;
-            }
-            set
-            {
-                this.Header.DisplayViewer = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public bool WritePdf
-        {
-            get
-            {
-                return this.Header.WritePdf;
-            }
-            set
-            {
-                this.Header.WritePdf = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public string Xml
-        {
-            get
-            {
-                return this.Header.Xml;
-            }
-            set
-            {
-                this.Header.Xml = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public string Revision => this.Header.Revision;
+      
+        public string NoteOne => this.Header.NoteOne;
+        
+        public string NoteTwo => this.Header.NoteTwo;
+      
+        public string NoteThree => this.Header.NoteThree;
+       
+        public string Report => this.Header.Report;
+        
+        public bool GenerateAutomaticImages => this.Header.GenerateAutomaticImages;
+       
+        public bool GenerateAutomaticOperationImages => this.Header.GenerateAutomaticOperationImages;
+      
+        public bool GenerateColorImages => this.Header.GenerateColorImages;
+        
+        public bool DisplayViewer => this.Header.DisplayViewer;
+       
+        public bool WritePdf => this.Header.WritePdf;
+      
+        public string Xml => this.Header.Xml;
 
         #endregion
 
@@ -327,8 +153,8 @@ namespace SetupSheetXML.ViewModels
         /// </summary>
         private void LoadValues()
         {
-            this.Header = File.Exists(HeaderFile) ?
-                this.serializerService.DeserializeObject<ReportHeader>(HeaderFile) :
+            this.Header = File.Exists(ApplicationConst.HeaderFile) ?
+                this.serializerService.DeserializeObject<ReportHeader>(ApplicationConst.HeaderFile) :
                 new ReportHeader();
         }
 
@@ -337,7 +163,7 @@ namespace SetupSheetXML.ViewModels
         /// </summary>
         private void SaveValues()
         {
-            this.serializerService.SerializeObject(HeaderFile, this.Header);
+            this.serializerService.SerializeObject(ApplicationConst.HeaderFile, this.Header);
         }
 
         /// <summary>
@@ -350,11 +176,11 @@ namespace SetupSheetXML.ViewModels
                 AddExtension = true,
                 CheckFileExists = true,
                 CheckPathExists = true,
-                DefaultExt = "rpx",
-                Filter = "Report (*.rpx)|*.rpx|All files (*.*)|*.*",
+                DefaultExt = ApplicationConst.DefaultExt,
+                Filter = ApplicationConst.ReportsFilter,
                 Title = ApplicationStrings.SelectReport,
                 ValidateNames = true,
-                InitialDirectory = ReportsFolder
+                InitialDirectory = ApplicationConst.ReportsFolder
             };
 
             var success = f.ShowDialog();
@@ -436,9 +262,7 @@ namespace SetupSheetXML.ViewModels
                 }
                 else
                 {
-                    this.messageBoxService.MastercamError(
-                        "XML generation failed, call to 'SetupSheet_DoRunNoDialog' returned false.",
-                        ApplicationStrings.Title);
+                    this.messageBoxService.MastercamError(ApplicationStrings.XmlFailed, ApplicationStrings.Title);
                 }
             }
             catch (Exception e)

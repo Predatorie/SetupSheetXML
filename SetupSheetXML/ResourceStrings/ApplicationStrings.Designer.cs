@@ -86,5 +86,23 @@ namespace SetupSheetXML.ResourceStrings {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The NET-Hook encountered a corupt settings file, please restart the NET-Hook. \n\nIf this error continues email mick.george@mastercam.com.
+        /// </summary>
+        public static string XmlDeserializeException {
+            get {
+                return ResourceManager.GetString("XmlDeserializeException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML generation failed, call to &apos;SetupSheet_DoRunNoDialog&apos; returned false..
+        /// </summary>
+        public static string XmlFailed {
+            get {
+                return ResourceManager.GetString("XmlFailed", resourceCulture);
+            }
+        }
     }
 }

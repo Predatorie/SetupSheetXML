@@ -67,22 +67,19 @@ namespace SetupSheetXML
                     SetupSheetInterop.SetupSheet.SetupSheet_DoFreeSetupSheetCaptures();
                 }
             }
+            catch (Exception e) when (e is InvalidOperationException)
+            {
+                // Likely an invalid xml file so delete it
+                if (File.Exists(ApplicationConst.HeaderFile))
+                {
+                    File.Delete(ApplicationConst.HeaderFile);
+                }
+
+                DialogManager.Error(ApplicationStrings.XmlDeserializeException, ApplicationStrings.Title);
+            }
             catch (Exception e)
             {
-                if (e is InvalidOperationException)
-                {
-                    // Likely an invalid xml file so delete it
-                    if (File.Exists(ApplicationConst.HeaderFile))
-                    {
-                        File.Delete(ApplicationConst.HeaderFile);
-                    }
-
-                    DialogManager.Error(ApplicationStrings.XmlDeserializeException, ApplicationStrings.Title);
-                }
-                else
-                {
-                    DialogManager.Exception(new MastercamException(e.Message));
-                }
+                DialogManager.Exception(new MastercamException(e.Message));
             }
 
             return MCamReturn.NoErrors;

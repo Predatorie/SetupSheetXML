@@ -161,10 +161,7 @@ namespace SetupSheetXML.ViewModels
         /// <summary>
         /// Save values to disk.
         /// </summary>
-        private void SaveValues()
-        {
-            this.serializerService.SerializeObject(ApplicationConst.HeaderFile, this.Header);
-        }
+        private void SaveValues() => this.serializerService.SerializeObject(ApplicationConst.HeaderFile, this.Header);
 
         /// <summary>
         /// Select a rpx (report)

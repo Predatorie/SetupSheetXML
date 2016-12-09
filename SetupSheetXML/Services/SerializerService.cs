@@ -9,13 +9,18 @@
 
 namespace SetupSheetXML.Services
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Text;
     using System.Xml;
     using System.Xml.Serialization;
 
+    /// <summary>
+    /// The serializer service.
+    /// </summary>
     public class SerializerService : ISerializerService
     {
-        public bool SerializeObject<T>(string filepath, T o)
+       [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
+       public bool SerializeObject<T>(string filepath, T o)
         {
             // Avoiding mutliple using's here, see-> CA2202: Do not dispose objects multiple times
             XmlWriter xmlWriter = null;

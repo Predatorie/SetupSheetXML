@@ -34,7 +34,7 @@ Developers can implement their own rules if they so choose.
 ** POST BUILD STEP **
 
 copy "$(TargetPath)" "C:\Program Files\mcamx9\chooks\$(TargetFileName)"
-copy "$(ProjectDir)\FunctionTable\$(TargetName).ft" "C:\Program Files\mcamx9\chooks\$(TargetName).ft"
+copy "$(ProjectDir)FunctionTable\$(TargetName).ft" "C:\Program Files\mcamx9\chooks\$(TargetName).ft"
 
 
 ** DEBUGGING **

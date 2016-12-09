@@ -30,8 +30,14 @@ namespace SetupSheetXML.Tests.Extenstions
         /// </summary>
         private readonly string thePropertyName;
 
+        /// <summary>
+        /// The the property names.
+        /// </summary>
         private readonly IEnumerable<string> thePropertyNames;
 
+        /// <summary>
+        /// The the subject.
+        /// </summary>
         private readonly T theSubject;
 
         ///  <summary> Initializes a new instance of the PropertyChangedExpectation class. </summary>

@@ -21,26 +21,38 @@ namespace SetupSheetXML.ViewModels
 
     using Commands;
 
-    using Mastercam.App.Exceptions;
+    using Consts;
 
-    using Services;
+    using Mastercam.App.Exceptions;
 
     using Models;
 
     using ResourceStrings;
 
-    using Consts;
+    using Services;
 
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
+    /// <summary>
+    /// The setup sheet view model.
+    /// </summary>
     public class SetupSheetViewModel : INotifyPropertyChanged
     {
         #region Backing Fields
 
+        /// <summary>
+        /// The message box service.
+        /// </summary>
         private readonly IMessageBoxService messageBoxService;
 
+        /// <summary>
+        /// The serializer service.
+        /// </summary>
         private readonly ISerializerService serializerService;
 
+        /// <summary>
+        /// The title.
+        /// </summary>
         private string title;
 
         #endregion
@@ -48,10 +60,15 @@ namespace SetupSheetXML.ViewModels
         #region Construction
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SetupSheetViewModel"/> class. 
         ///  The SetupSheetViewModel constructor
         /// </summary>
-        /// <param name="messageBoxService">The MessageBoxService instance</param>
-        /// <param name="serializerService">The SerializerService instance</param>
+        /// <param name="messageBoxService">
+        /// The MessageBoxService instance
+        /// </param>
+        /// <param name="serializerService">
+        /// The SerializerService instance
+        /// </param>
         public SetupSheetViewModel(IMessageBoxService messageBoxService, ISerializerService serializerService)
         {
             // Wire up our services
@@ -63,7 +80,7 @@ namespace SetupSheetXML.ViewModels
             this.CloseCommand = new DelegateCommand<Window>(this.Close);
             this.BrowseCommand = new DelegateCommand(this.BrowseReport);
 
-            //  Initialize view from previous session 
+            // Initialize view from previous session 
             this.LoadValues();
 
             this.Title = ApplicationStrings.Title;
@@ -73,24 +90,49 @@ namespace SetupSheetXML.ViewModels
 
         #region Commands
 
+        /// <summary>
+        /// Gets the ok command.
+        /// </summary>
         public ICommand OkCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the close command.
+        /// </summary>
         public ICommand CloseCommand { get; private set; }
 
+        /// <summary>
+        /// Gets the browse command.
+        /// </summary>
         public ICommand BrowseCommand { get; private set; }
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        /// The property changed.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
         #region Public Properties
 
+        /// <summary>
+        /// Gets or sets the header.
+        /// </summary>
         public ReportHeader Header { get; set; }
 
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
         public string Title
         {
             get
             {
                 return this.title;
             }
+
             set
             {
                 this.title = value;
@@ -98,46 +140,91 @@ namespace SetupSheetXML.ViewModels
             }
         }
 
+        /// <summary>
+        /// The project.
+        /// </summary>
         public string Project => this.Header.Project;
 
+        /// <summary>
+        /// The customer.
+        /// </summary>
         public string Customer => this.Header.Customer;
 
+        /// <summary>
+        /// The programmer.
+        /// </summary>
         public string Programmer => this.Header.Programmer;
-        
+
+        /// <summary>
+        /// The drawing.
+        /// </summary>
         public string Drawing => this.Header.Drawing;
 
+        /// <summary>
+        /// The revision.
+        /// </summary>
         public string Revision => this.Header.Revision;
-      
+
+        /// <summary>
+        /// The note one.
+        /// </summary>
         public string NoteOne => this.Header.NoteOne;
-        
+
+        /// <summary>
+        /// The note two.
+        /// </summary>
         public string NoteTwo => this.Header.NoteTwo;
-      
+
+        /// <summary>
+        /// The note three.
+        /// </summary>
         public string NoteThree => this.Header.NoteThree;
-       
+
+        /// <summary>
+        /// The report.
+        /// </summary>
         public string Report => this.Header.Report;
-        
+
+        /// <summary>
+        /// The generate automatic images.
+        /// </summary>
         public bool GenerateAutomaticImages => this.Header.GenerateAutomaticImages;
-       
+
+        /// <summary>
+        /// The generate automatic operation images.
+        /// </summary>
         public bool GenerateAutomaticOperationImages => this.Header.GenerateAutomaticOperationImages;
-      
+
+        /// <summary>
+        /// The generate color images.
+        /// </summary>
         public bool GenerateColorImages => this.Header.GenerateColorImages;
-        
+
+        /// <summary>
+        /// The display viewer.
+        /// </summary>
         public bool DisplayViewer => this.Header.DisplayViewer;
-       
+
+        /// <summary>
+        /// The write pdf.
+        /// </summary>
         public bool WritePdf => this.Header.WritePdf;
-      
+
+        /// <summary>
+        /// The xml.
+        /// </summary>
         public string Xml => this.Header.Xml;
 
-        #endregion
-
-        #region Public Events
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
+        #endregion   
 
         #region Protected Methods
 
+        /// <summary>
+        /// The on property changed.
+        /// </summary>
+        /// <param name="propertyName">
+        /// The property name.
+        /// </param>
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -191,7 +278,7 @@ namespace SetupSheetXML.ViewModels
         /// Make sure we have a report selected and a xml file name
         /// Note: A report is needed because that determines what data is exported to the xml
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if file exits, false otherwise</returns>
         private bool CanGenerateXml()
         {
             // Only if we have a report name and a report
@@ -228,7 +315,8 @@ namespace SetupSheetXML.ViewModels
                 var xmlFiles = new List<string>();
 
                 // Run the C-Hook command to generate the XML
-                var success = SetupSheetInterop.SetupSheet.SetupSheet_DoRunNoDialog(ref drawingInfo,
+                var success = SetupSheetInterop.SetupSheet.SetupSheet_DoRunNoDialog(
+                    ref drawingInfo,
                     ref rpx,
                     this.Header.GenerateAutomaticImages,
                     this.Header.GenerateAutomaticOperationImages,

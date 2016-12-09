@@ -26,7 +26,6 @@ namespace SetupSheetXML.Tests.Extenstions
         /// <param name="propertyExpression"> The property expression. </param>
         ///
         /// <returns> A PropertyChangedExpectation&lt;T&gt; </returns>
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public static
             PropertyChangedExpectation<T>
             ShouldNotifyFor<T, TProp>(this T subject, Expression<Func<T, TProp>> propertyExpression)

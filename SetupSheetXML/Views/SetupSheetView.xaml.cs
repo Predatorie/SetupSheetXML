@@ -16,6 +16,9 @@ namespace SetupSheetXML.Views
     /// </summary>
     public partial class SetupSheetView : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SetupSheetView"/> class.
+        /// </summary>
         public SetupSheetView()
         {
             this.InitializeComponent();

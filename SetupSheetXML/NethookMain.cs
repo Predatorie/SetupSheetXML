@@ -60,12 +60,9 @@ namespace SetupSheetXML
                                        new MessageBoxService(),
                                        new SerializerService())
                 };
-                var ret = view.ShowDialog();
 
-                if (ret != null && (bool)ret)
-                {
-                    SetupSheetInterop.SetupSheet.SetupSheet_DoFreeSetupSheetCaptures();
-                }
+                var ret = view.ShowDialog();
+                
             }
             catch (Exception e) when (e is InvalidOperationException)
             {

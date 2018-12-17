@@ -128,10 +128,7 @@ namespace SetupSheetXML.ViewModels
         /// </summary>
         public string Title
         {
-            get
-            {
-                return this.title;
-            }
+            get => this.title;
 
             set
             {

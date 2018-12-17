@@ -55,7 +55,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NETHook3_0">
-      <HintPath>..\..\..\..\..\..\..\Program Files\mcamX9\NETHook3_0.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\Mcam2019\NETHook3_0.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -130,9 +130,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files\mcamx9\chooks\$(TargetFileName)"
-copy "$(ProjectDir)FunctionTable\$(TargetName).ft" "C:\Program Files\mcamx9\chooks\$(TargetName).ft"
-copy "$(ProjectDir)Dependencies\SetupSheetInterop.dll" "C:\Program Files\mcamx9\chooks\SetupSheetInterop.dll"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files\mcam2019\chooks\$(TargetFileName)"
+copy "$(ProjectDir)FunctionTable\$(TargetName).ft" "C:\Program Files\mcam2019\chooks\$(TargetName).ft"
+copy "$(ProjectDir)Dependencies\SetupSheetInterop.dll" "C:\Program Files\mcam2019\chooks\SetupSheetInterop.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

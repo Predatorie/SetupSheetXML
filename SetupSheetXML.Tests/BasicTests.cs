@@ -14,7 +14,6 @@ namespace SetupSheetXML.Tests
     using Extenstions;
 
     using Models;
-
     using NUnit.Framework;
 
     /// <summary>
@@ -89,19 +88,6 @@ namespace SetupSheetXML.Tests
             Assert.That(
                 ex.Message,
                 Is.EqualTo(ExpectedMessage));
-        }
-
-        /// <summary>
-        /// The multiple properties assert pass.
-        /// </summary>
-        [Test]
-        public void MultipleProperties_AssertPass()
-        {
-            var reportHeader = new ReportHeader();
-
-            reportHeader.ShouldNotifyFor(x => x.Customer)
-                     .And(x => x.Xml)
-                     .When(() => reportHeader.Customer = "Mick");
         }
 
         /// <summary>
